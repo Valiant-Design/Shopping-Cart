@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DShopping Cart</title>
+    <style>
+        /* Import Font From Google Font */
+      @import url("https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap");
+
+      /* Using the font */
+      body {
+        font-family: "Bai Jamjuree", sans-serif;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      .nav-menu {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .Promos {
+        width: 17rem;
+        height: 2rem;
+        border: 2px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        background-color: #000;
+        font-weight: bold;
+        animation: color 8s infinite ease-in-out;
+      }
+
+      @keyframes color {
+        0% {
+          color: orange;
+        }
+        10% {
+          color: rgb(255, 39, 255);
+        }
+        20% {
+          color: rgb(63, 255, 63);
+        }
+        30% {
+          color: rgb(127, 127, 255);
+        }
+        40% {
+          color: red;
+        }
+        50% {
+          color: violet;
+        }
+        60% {
+          color: rgb(198, 119, 255);
+        }
+        70% {
+          color: salmon;
+        }
+        80% {
+          color: silver;
+        }
+        90% {
+          color: pink;
+        }
+        100% {
+          color: white;
+        }
+      }
+
+      #items {
+        margin: 20px 0;
+        text-align: center;
+      }
+
+      label {
+        display: inline-block;
+        width: 100px;
+      }
+
+      input[type="number"] {
+        width: 50px;
+      }
+
+      button {
+        display: block;
+        background-color: #47b0e4;
+        padding: 1rem 1.3rem;
+        font-size: 1rem;
+        font-weight: bold;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        margin: 20px auto;
+      }
+
+      #orange,
+      #apple {
+        height: 15px;
+        width: 60px;
+        border: 2px solid black;
+        border-radius: 10px;
+        padding: 10px;
+      }
+
+      .apples {
+        font-weight: bold;
+        color: green;
+      }
+
+      .oranges {
+        font-weight: bold;
+        color: orange;
+      }
+
+      #total {
+        text-align: center;
+        font-size: 1.2em;
+        font-weight: bold;
+      }
+
+    </style>
+
+
+  </head>
+  <body>
+
+    <!-- Name of Project -->
+    <h1>SHOPPING CART</h1>
+
+    <!-- Display Of Promo -->
+    <div class="nav-menu">
+      <p class="Promos">Buy 1 Apple, Get 1 Apple for free</p>
+      <p class="Promos">Buy 3 Orange and pay for 2</p>
+    </div>
+
+    <!-- Select the numbers of your order -->
+    <div id="items">
+      <p class="price-tag">APPLE Price = $0.60</p>
+      <label for="apple">Apple: </label>
+      <input type="number" id="apple" min="0" value="0" />
+      <br />
+      <p class="price-tag">ORANGE Price = $0.25</p>
+      <label for="orange">Orange: </label>
+      <input type="number" id="orange" min="0" value="0" />
+    </div>
+
+    <!-- Calculation Button to display Result -->
+    <button onclick="calculateTotal()">Calculate Total</button>
+
+    <!-- This DIV TAG displays the result of the selected order -->
+    <div id="total"></div>
+
+
+
+    <script>
+      function calculateTotal() {
+        const applePrice = 0.6;
+        const orangePrice = 0.25;
+
+        let appleQty = parseInt(document.getElementById("apple").value);
+        let orangeQty = parseInt(document.getElementById("orange").value);
+
+        // Calculate the total cost for apples with the "Buy one, get one free" offer
+        const appleTotal = appleQty * applePrice;
+
+        // Calculate the total cost for oranges with the "buy 3 oranges and pay for the price of 2" offer
+        let orangeTotal = 0;
+        if (orangeQty >= 3) {
+          orangeTotal =
+            (Math.floor(orangeQty / 3) * 2 + (orangeQty % 3)) * orangePrice;
+        } else {
+          orangeTotal = orangeQty * orangePrice;
+        }
+
+        // Display the number of actual apples selected and the extra ones given for each selected apple
+        const actualApples = appleQty;
+        const extraApples = appleQty;
+
+        // Display the number of oranges selected with a note for special calculations
+        let orangeText = `Oranges: ${orangeQty} ${
+          orangeQty > 1 ? "oranges" : "orange"
+        }`;
+        if (orangeQty >= 3) {
+          const calculatedOranges = Math.floor(orangeQty / 3) * 2;
+          orangeText += ` (calculation for only ${calculatedOranges} oranges =`;
+        }
+
+        // Check if no apple or orange was selected
+        if (
+          isNaN(appleQty) ||
+          isNaN(orangeQty) ||
+          (appleQty === 0 && orangeQty === 0)
+        ) {
+          alert("Please select a number for both apple and orange!");
+          return;
+        }
+
+        // Display the total cost, total price of apples, and total price of oranges in a column
+        const total = appleTotal + orangeTotal;
+        const totalContainer = document.getElementById("total");
+        totalContainer.innerHTML = `
+           <div class="result">
+               <div class="apples">Total Apple Selected: ${actualApples} ${
+          actualApples > 1 ? "apples" : "apple"
+        } (Total Price of Apple: $${appleTotal.toFixed(
+          2
+        )})  <br> Total Promo Given on Each Apple Selected: ${extraApples} </div>
+               <div class="oranges">${orangeText} Total Price: $${orangeTotal.toFixed(
+          2
+        )})</div>
+               <div>Total Cost: $${total.toFixed(2)}</div>
+           </div>
+       `;
+      }
+
+    </script>
+  </body>
+</html>
